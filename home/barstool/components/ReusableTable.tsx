@@ -5,11 +5,13 @@ import {DeleteOutline, EditOutlined, PanoramaFishEye} from "@mui/icons-material"
 
 
 const ReusableTable = ({columns,data}:ReusableTableProps) => {
+    let dynamicKey = Object.keys(data);
+    console.log(dynamicKey[0])
 
+    console.log(name)
     const renderCell = (category: any, columnKey: React.Key) => {
-        // @ts-ignore
+
         const cellValue = category[columnKey];
-        console.log(columnKey)
         switch (columnKey) {
             case "actions":
                 return (
@@ -46,6 +48,7 @@ const ReusableTable = ({columns,data}:ReusableTableProps) => {
         }
     };
 
+    // @ts-ignore
     return(
         <Table
             bordered
@@ -57,14 +60,15 @@ const ReusableTable = ({columns,data}:ReusableTableProps) => {
             }}
         >
             <Table.Header columns={columns}>
-                {(column) => (
+
+                {(column: ColumnProp) => (
                     <Table.Column allowsSorting
                                   hideHeader={column.key === "actions"}
                                   align={column.key === "actions" ? "center" : "start"}
                                   key={column.key}>{column.label}</Table.Column>
                 )}
             </Table.Header>
-            <Table.Body items={data.Ingredient_Type}>
+            <Table.Body items={data[`${dynamicKey[0]}`]}>
                 {(item: any) => (
                     <Table.Row key={item.key}>
                         {(columnKey: React.Key) => <Table.Cell>{renderCell(item, columnKey)}</Table.Cell>}
@@ -80,6 +84,11 @@ const ReusableTable = ({columns,data}:ReusableTableProps) => {
             />
         </Table>
     )
+}
+
+type ColumnProp = {
+    key: any
+    label: any
 }
 
 type ReusableTableProps = {
