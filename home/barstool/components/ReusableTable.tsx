@@ -1,37 +1,12 @@
-import type { NextPage } from 'next';
-import {Col, Container, Row, Table, Text, Tooltip, useAsyncList} from "@nextui-org/react";
-import {useQuery} from "@apollo/client";
-import Query_Ingredient_Types from '../../../queries/allIngredientTypesQuery.graphql';
-import React, {useEffect} from "react";
+import React from "react";
+import {Col, Row, Table, Tooltip} from "@nextui-org/react";
 import {IconButton} from "@mui/material";
 import {DeleteOutline, EditOutlined, PanoramaFishEye} from "@mui/icons-material";
-import ReusableTable from "../../../components/ReusableTable";
-
-type CategoryType = {
-    key: string | number
-    name?: string
-}
-
-const Category: NextPage = () => {
-    const { data, loading, error } = useQuery(Query_Ingredient_Types);
 
 
-    const columns = [
-        {
-            key: "key",
-            label: "Id",
-        },
-        {
-            key: "name",
-            label: "Name",
-        },
-        {
-            key: "actions",
-            label: "Actions"
-        },
-    ];
+const ReusableTable = ({columns,data}:ReusableTableProps) => {
 
-    const renderCell = (category: CategoryType, columnKey: React.Key) => {
+    const renderCell = (category: any, columnKey: React.Key) => {
         // @ts-ignore
         const cellValue = category[columnKey];
         console.log(columnKey)
@@ -71,22 +46,45 @@ const Category: NextPage = () => {
         }
     };
 
-    return (
-            <Container>
-                <Row>
-                    <Text h2>
-                        Ingredient Categories
-                    </Text>
-                </Row>
-                <Row>
-                    { !loading ?
-                        <ReusableTable columns={columns} data={data}></ReusableTable>
-                        :
-                        <p>Loading</p>
-                    }
-                </Row>
-            </Container>
+    return(
+        <Table
+            bordered
+            lined
+            aria-label="Example table with dynamic content"
+            css={{
+                height: "auto",
+                minWidth: "100%",
+            }}
+        >
+            <Table.Header columns={columns}>
+                {(column) => (
+                    <Table.Column allowsSorting
+                                  hideHeader={column.key === "actions"}
+                                  align={column.key === "actions" ? "center" : "start"}
+                                  key={column.key}>{column.label}</Table.Column>
+                )}
+            </Table.Header>
+            <Table.Body items={data.Ingredient_Type}>
+                {(item: any) => (
+                    <Table.Row key={item.key}>
+                        {(columnKey: React.Key) => <Table.Cell>{renderCell(item, columnKey)}</Table.Cell>}
+                    </Table.Row>
+                )}
+            </Table.Body>
+            <Table.Pagination
+                shadow
+                noMargin
+                align="center"
+                rowsPerPage={12}
+                onPageChange={(page) => console.log({page})}
+            />
+        </Table>
     )
 }
 
-export default Category
+type ReusableTableProps = {
+    columns: any
+    data: any
+}
+
+export default ReusableTable

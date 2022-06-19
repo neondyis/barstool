@@ -1,0 +1,6 @@
+query allIngredientTypes {
+    Ingredient_Type {
+        key:id
+        name
+    }
+}
