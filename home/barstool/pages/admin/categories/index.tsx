@@ -7,7 +7,6 @@ import ReusableTable from "../../../components/ReusableTable";
 
 const Category: NextPage = () => {
     const { data, loading, error } = useQuery(Query_Ingredient_Types);
-
     const columns = [
         {
             key: "key",

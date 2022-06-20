@@ -1,0 +1,14 @@
+query allIngredients {
+    Ingredient {
+        key: id
+        alcohol_percentage
+        manual
+        name
+        Type {
+            type: name
+        }
+        Brand {
+            brand:name
+        }
+    }
+}

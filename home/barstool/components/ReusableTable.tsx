@@ -2,13 +2,19 @@ import React from "react";
 import {Col, Row, Table, Tooltip} from "@nextui-org/react";
 import {IconButton} from "@mui/material";
 import {DeleteOutline, EditOutlined, PanoramaFishEye} from "@mui/icons-material";
+import flattenObject from './flattener'
 
-
-const ReusableTable = ({columns,data}:ReusableTableProps) => {
+function ReusableTable ({columns,data}:ReusableTableProps)  {
     let dynamicKey = Object.keys(data);
-    console.log(dynamicKey[0])
+    data = data[`${dynamicKey[0]}`];
+    const flattenData: any[] = [];
+    data.forEach((part:any, index:any) => {
+        flattenData[index] = flattenObject(data);
+    })
+    data = flattenData;
+    console.log(data)
+    console.log(flattenData)
 
-    console.log(name)
     const renderCell = (category: any, columnKey: React.Key) => {
 
         const cellValue = category[columnKey];
@@ -68,7 +74,7 @@ const ReusableTable = ({columns,data}:ReusableTableProps) => {
                                   key={column.key}>{column.label}</Table.Column>
                 )}
             </Table.Header>
-            <Table.Body items={data[`${dynamicKey[0]}`]}>
+            <Table.Body items={data}>
                 {(item: any) => (
                     <Table.Row key={item.key}>
                         {(columnKey: React.Key) => <Table.Cell>{renderCell(item, columnKey)}</Table.Cell>}
